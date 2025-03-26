@@ -115,3 +115,4 @@ C:\Users\russe\OneDrive\Desktop\Mission_11\backend\Project11\obj\Debug\net8.0\Ba
 C:\Users\russe\OneDrive\Desktop\Mission_11\backend\Project11\obj\Debug\net8.0\BackEnd.genruntimeconfig.cache
 C:\Users\russe\OneDrive\Desktop\Mission_11\backend\Project11\obj\Debug\net8.0\ref\BackEnd.dll
 C:\Users\russe\OneDrive\Desktop\Mission_11\backend\Project11\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+C:\Users\russe\OneDrive\Desktop\Mission_11\backend\Project11\obj\Debug\net8.0\BackEnd.sourcelink.json

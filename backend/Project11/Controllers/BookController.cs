@@ -19,14 +19,59 @@ namespace Project11.Controllers
             _context = context;
         }
 
-        // GET: api/Book
+        // ✅ GET: api/Book (Supports Filtering & Pagination)
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
+        public async Task<ActionResult<IEnumerable<Book>>> GetBooks(
+        [FromQuery] string? category = null,
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 5)
         {
-            return await _context.Books.ToListAsync();
+            // ✅ Ensure page numbers are valid
+            if (page < 1 || pageSize < 1)
+                return BadRequest("Page number and page size must be at least 1.");
+
+            // ✅ Start with all books
+            IQueryable<Book> query = _context.Books;
+
+            // ✅ Filter by category if not null or empty
+            if (!string.IsNullOrWhiteSpace(category))
+            {
+                query = query.Where(b => b.Category == category);
+            }
+
+            // ✅ Get total book count for pagination
+            int totalBooks = await query.CountAsync();
+
+            // ✅ Apply sorting and pagination
+            var books = await query
+                .OrderBy(b => b.Title) // Always sort alphabetically
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            // ✅ Return both totalBooks & paginated results
+            return Ok(new
+            {
+                TotalBooks = totalBooks,
+                Books = books
+            });
         }
 
-        // GET: api/Book/5
+
+        // ✅ GET: api/Book/categories (Returns List of Categories)
+        [HttpGet("categories")]
+        public async Task<ActionResult<IEnumerable<string>>> GetCategories()
+        {
+            var categories = await _context.Books
+                .Select(b => b.Category)
+                .Distinct()
+                .OrderBy(c => c)
+                .ToListAsync();
+
+            return Ok(categories);
+        }
+
+        // ✅ GET: api/Book/5 (Get Single Book)
         [HttpGet("{id}")]
         public async Task<ActionResult<Book>> GetBook(int id)
         {
@@ -35,7 +80,7 @@ namespace Project11.Controllers
             return book;
         }
 
-        // POST: api/Book
+        // ✅ POST: api/Book (Add New Book)
         [HttpPost]
         public async Task<ActionResult<Book>> AddBook(Book book)
         {
@@ -44,7 +89,7 @@ namespace Project11.Controllers
             return CreatedAtAction(nameof(GetBook), new { id = book.BookID }, book);
         }
 
-        // PUT: api/Book/5
+        // ✅ PUT: api/Book/5 (Update Book)
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBook(int id, Book book)
         {
@@ -55,7 +100,7 @@ namespace Project11.Controllers
             return NoContent();
         }
 
-        // DELETE: api/Book/5
+        // ✅ DELETE: api/Book/5 (Delete Book)
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBook(int id)
         {

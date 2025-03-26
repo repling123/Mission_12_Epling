@@ -27,7 +27,8 @@ namespace Project11.Models
         public int PageCount { get; set; } 
 
         [Required]
-        public decimal Price { get; set; } 
+        public decimal Price { get; set; }
+
     }
 }
 

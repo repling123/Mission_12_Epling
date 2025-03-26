@@ -1,5 +1,6 @@
 // Book interface to match the database schema
 export interface Book {
+  quantity: number;
   bookId: number;
   title: string;
   author: string;
